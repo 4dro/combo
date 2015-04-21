@@ -14,8 +14,9 @@ return declare([_WidgetBase], {
 	selectedItem: null,
 	htmlItems: false,
 
-	_popupActive: false,
+	_popupListener: null,
 	_textNode: null,
+	_mainNode: null,
 
 // ************************** Construction **********************************************
 	buildRendering: function()
@@ -27,19 +28,23 @@ return declare([_WidgetBase], {
 		{
 
 		}
+		this._mainNode = this.ownerDocument.createElement('div');
+		this._mainNode.className = "cbBar";
+
 		var bar = this.ownerDocument.createElement('div');
 		bar.className = 'cbTextBar';
-		this.domNode.appendChild(bar);
 		this._textNode = document.createElement('div');
-		bar.appendChild(this._textNode);
 		this._textNode.textContent = this.prompt;
+		bar.appendChild(this._textNode);
+		this._mainNode.appendChild(bar);
 
 		var pop = this.ownerDocument.createElement('div');
 		pop.className = 'cbIconBar';
-		this.domNode.appendChild(pop);
+		this._mainNode.appendChild(pop);
 		var popupIcon = this.ownerDocument.createElement('span');
 		popupIcon.className = 'cbPopupIcon';
 		pop.appendChild(popupIcon);
+		this.domNode.appendChild(this._mainNode);
 
 		this.inherited(arguments);
 		if (!this.domNode.getAttribute('tabindex'))
@@ -48,7 +53,7 @@ return declare([_WidgetBase], {
 		}
 		var self = this;
 		this.own(on(this.domNode, 'click', function(e){
-			if (self._popupActive)
+			if (self.popup)
 			{
 				self.closePopup();
 			}
@@ -77,7 +82,7 @@ return declare([_WidgetBase], {
 	setDataProvider: function(dp)
 	{
 		this.dataProvider = dp;
-		if (this._popupActive)
+		if (this.popup)
 		{
 			this.closePopup();
 		}
@@ -111,15 +116,18 @@ return declare([_WidgetBase], {
 // ******************************** Internal functions **********************************************
 	showPopup: function()
 	{
-		if (!this.popup)
+		if (this.popup)
 		{
-			this.popup = this.ownerDocument.createElement('div');
-			this.popup.className = 'cbPopup';
-			this.own(on(this.popup, 'click', function(e){
-
-			}));
-			this.ownerDocument.body.appendChild(this.popup);
+			throw new Error('popup already exists')
 		}
+		this.popup = this.ownerDocument.createElement('div');
+		this.popup.className = 'cbPopup';
+		var self = this;
+		this._popupListener = on(this.popup, 'click', function(e){
+			self.popupClicked(e);
+		});
+		this.domNode.appendChild(this.popup);
+
 		var list = this.ownerDocument.createElement('ul');
 		for (var i = 0; i < this.dataProvider.length; i++)
 		{
@@ -127,7 +135,6 @@ return declare([_WidgetBase], {
 			opt.innerHTML = this.getItemLabel(this.dataProvider[i]);
 			list.appendChild(opt);
 		}
-		this._popupActive = true;
 		this.popup.appendChild(list);
 	},
 
@@ -135,9 +142,11 @@ return declare([_WidgetBase], {
 	{
 		if (!this.popup)
 		{
-			return;
+			throw new Error('popup doesnt exist')
 		}
-		this.popup.style.display = 'none';	// TODO: remove popup completely
+		this._popupListener.remove();
+		this.domNode.removeChild(this.popup);
+		this.popup = null;
 	},
 
 	getItemLabel: function(item)
