@@ -52,9 +52,21 @@ return declare([_WidgetBase], {
 			this.domNode.setAttribute('tabindex', '0');
 		}
 		var self = this;
+		this.own(on(this.domNode, 'blur', function(e){
+			if (self.popup)
+			{
+				self.closePopup();
+			}
+		}));
 		this.own(on(this.domNode, 'click', function(e){
 			if (self.popup)
 			{
+				var item = e.target;
+				if (item.localName == 'li')
+				{
+					self.setSelectedIndex(item.getAttribute('data-idx'));
+					self.onChange();
+				}
 				self.closePopup();
 			}
 			else
@@ -98,6 +110,7 @@ return declare([_WidgetBase], {
 
 	setSelectedIndex: function(value)
 	{
+		value = parseInt(value);
 		if (this.selectedIndex == value)
 		{
 			return;
@@ -129,9 +142,15 @@ return declare([_WidgetBase], {
 		this.domNode.appendChild(this.popup);
 
 		var list = this.ownerDocument.createElement('ul');
+		list.className = 'cbPopList';
 		for (var i = 0; i < this.dataProvider.length; i++)
 		{
 			var opt = this.ownerDocument.createElement('li');
+			opt.setAttribute('data-idx', i);
+			if (i == this.selectedIndex)
+			{
+				opt.className = 'cbSelected';
+			}
 			opt.innerHTML = this.getItemLabel(this.dataProvider[i]);
 			list.appendChild(opt);
 		}

@@ -40,3 +40,21 @@
 	background-color: white;
 }
 
+.cbPopList {
+	list-style-type: none;
+	min-width: 40px;
+	padding: 3px;
+	margin: 0;
+}
+
+.cbPopList > li {
+	display: block;
+}
+
+.cbPopList > li:hover {
+	background-color: lightblue;
+}
+
+.cbPopList > li.cbSelected {
+	background-color: #549dff;
+}
