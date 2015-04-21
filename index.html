@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Combobox widget</title>
+	<link rel="stylesheet" href="combo.css">
+	<link rel="stylesheet" href="styles.css">
+	<script type="text/javascript" src="../dojo/dojo/dojo.js"
+		data-dojo-config="parseOnLoad: false, async: true, packages: [{name: 'widgets', location: '../../combo/widgets'}]">
+	</script>
+	<script type="text/javascript">
+require(['dojo/parser', 'dijit/registry', 'widgets/combo/ComboBox', 'dojo/domReady!'],
+function(parser, registry){
+	parser.parse();
+	var first = registry.byId('first');
+	first.setDataProvider(['1', '2', '3']);
+});
+	</script>
+</head>
+<body>
+	<div style="overflow: hidden;">
+		<h1>Combo widget</h1>
+	</div>
+	<div style="padding: 10px;">
+		<span data-dojo-type="widgets/combo/ComboBox" id="first"></span>
+	</div>
+	<div style="padding: 10px;">
+		<select style="width: 70px;">
+			<option>One</option>
+			<option>Two</option>
+			<option>Three</option>
+		</select>
+	</div>
+</body>
+</html>

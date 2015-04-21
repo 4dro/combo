@@ -1,0 +1,36 @@
+.cbInput {
+	display: inline-block;
+	border: 1px solid #A9A9A9;
+	position: relative;
+	padding: 3px;
+	cursor: default;
+	box-sizing: border-box;
+	border-radius: 2px;
+}
+
+.cbInput > div {
+	display: table-cell;
+}
+
+.cbTextBar {
+	min-width: 30px;
+}
+
+.cbIconBar {
+	border-left: 1px solid gray;
+}
+
+.cbPopup {
+	position: absolute;
+	border: 1px solid black;
+}
+
+.cbPopupIcon {
+	display: inline-block;
+	width: 3px;
+	height: 6px;
+	box-sizing: border-box;
+	border-top: 6px solid black;
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+}
