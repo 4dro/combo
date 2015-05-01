@@ -2,15 +2,15 @@
 	display: inline-block;
 	border: 1px solid #A9A9A9;
 	position: relative;
-	padding: 3px;
 	cursor: default;
 	box-sizing: border-box;
 	border-radius: 2px;
 }
 
 .cbBar {
-
+	padding: 3px;
 }
+
 .cbBar > div {
 	display: table-cell;
 }

@@ -5,15 +5,22 @@
 	<title>Combobox widget</title>
 	<link rel="stylesheet" href="combo.css">
 	<link rel="stylesheet" href="styles.css">
+
+<!--
+	<script type="text/javascript" src="build/require.js"></script>
+	<script type="text/javascript" src="build/ComboBox.js"></script>
+-->
+
 	<script type="text/javascript" src="../dojo/dojo/dojo.js"
-		data-dojo-config="parseOnLoad: false, async: true, packages: [{name: 'widgets', location: '../../combo/widgets'}]">
+		data-dojo-config="parseOnLoad: false, async: true, packages: [{name: 'combo', location: '../../combo/combo'}]">
 	</script>
+
 	<script type="text/javascript">
-require(['dojo/parser', 'dijit/registry', 'widgets/combo/ComboBox', 'dojo/domReady!'],
+require(['dojo/parser', 'dijit/registry', 'combo/ComboBox', 'dojo/domReady! '],
 function(parser, registry){
 	parser.parse();
 	var first = registry.byId('first');
-	first.setDataProvider(['1', '2', '3']);
+	first.setDataProvider(['abc', '2', 'ABJCSUFHIHFHFIFJIJF', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b']);
 });
 	</script>
 </head>
@@ -22,13 +29,22 @@ function(parser, registry){
 		<h1>Combo widget</h1>
 	</div>
 	<div style="padding: 10px;">
-		<span data-dojo-type="widgets/combo/ComboBox" id="first"></span>
+		<span data-dojo-type="combo/ComboBox" id="first"></span>
 	</div>
 	<div style="padding: 10px;">
 		<select style="width: 70px;">
 			<option>One</option>
 			<option>Two</option>
 			<option>Three</option>
+			<option>dfklgjdfpgjdpfgjdpfgjdpfgjdpfgjpdfgjpdfgjpdfgjpdj\zvclm vroThree</option>
+		</select>
+	</div>
+	<div style="padding: 10px;">
+		<select style="width: 70px;" data-dojo-type="combo/ComboBox" data-dojo-props="maxHeight: '30px'">
+			<option>One</option>
+			<option>Two</option>
+			<option>Three</option>
+			<option>dfklgjdfpgjdpfgjdpfgjdpfgjdpfgjpdfgjpdfgjpdfgjpdj\zvclm vroThree</option>
 		</select>
 	</div>
 </body>

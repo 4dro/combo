@@ -6,14 +6,15 @@ define([
 ], function(declare, _WidgetBase, on, keys){
 return declare([_WidgetBase], {
 
-	popup: null,
 	dataProvider: null,
 	labelField: 'label',
 	prompt: '',
-	selectedIndex: -1,
-	selectedItem: null,
+	_selectedIndex: -1,
 	htmlItems: false,
+	maxHeight: '300px',
 
+	// dom nodes
+	popup: null,
 	_popupListener: null,
 	_textNode: null,
 	_mainNode: null,
@@ -24,10 +25,7 @@ return declare([_WidgetBase], {
 		this.dataProvider = this.dataProvider || [];
 		this.domNode = this.ownerDocument.createElement('div');
 		this.domNode.className = 'cbInput';
-		if (this.srcNodeRef)	// handle existing html select
-		{
 
-		}
 		this._mainNode = this.ownerDocument.createElement('div');
 		this._mainNode.className = "cbBar";
 
@@ -45,6 +43,23 @@ return declare([_WidgetBase], {
 		popupIcon.className = 'cbPopupIcon';
 		pop.appendChild(popupIcon);
 		this.domNode.appendChild(this._mainNode);
+
+		if (this.srcNodeRef)	// handle existing html select
+		{
+			if (this.srcNodeRef.localName == 'select')
+			{
+				var opts = this.srcNodeRef.getElementsByTagName('option');
+				var dp = [];
+				for (var i = 0; i < opts.length; i++)
+				{
+					var option = {};
+					var label = opts[i].getAttribute('label');
+					option.label = label;
+					dp.push(option);
+				}
+				this.setDataProvider(dp);
+			}
+		}
 
 		this.inherited(arguments);
 		if (!this.domNode.getAttribute('tabindex'))
@@ -79,13 +94,34 @@ return declare([_WidgetBase], {
 			{
 				self.showPopup();
 			}
+			else if (e.keyCode == keys.ESCAPE)
+			{
+				if (self.popup)
+				{
+					self.closePopup();
+				}
+			}
 			else if (e.keyCode == keys.UP_ARROW)
 			{
+				if (self.popup)
+				{
 
+				}
+				else
+				{
+
+				}
 			}
 			else if (e.keyCode == keys.DOWN_ARROW)
 			{
+				if (self.popup)
+				{
 
+				}
+				else
+				{
+
+				}
 			}
 		}));
 	},
@@ -108,14 +144,19 @@ return declare([_WidgetBase], {
 		}
 	},
 
+	getSelectedIndex: function()
+	{
+		return this._selectedIndex;
+	},
+
 	setSelectedIndex: function(value)
 	{
 		value = parseInt(value);
-		if (this.selectedIndex == value)
+		if (this._selectedIndex == value)
 		{
 			return;
 		}
-		this.selectedIndex = value;
+		this._selectedIndex = value;
 		if (value == -1)
 		{
 			this._textNode.textContent = this.prompt;
@@ -124,6 +165,15 @@ return declare([_WidgetBase], {
 		{
 			this._textNode.textContent = this.getItemLabel(this.dataProvider[value]);
 		}
+	},
+
+	getSelectedItem: function()
+	{
+		if (this._selectedIndex == -1)
+		{
+			return null;
+		}
+		return this.dataProvider[this._selectedIndex];
 	},
 
 // ******************************** Internal functions **********************************************
@@ -147,7 +197,7 @@ return declare([_WidgetBase], {
 		{
 			var opt = this.ownerDocument.createElement('li');
 			opt.setAttribute('data-idx', i);
-			if (i == this.selectedIndex)
+			if (i == this._selectedIndex)
 			{
 				opt.className = 'cbSelected';
 			}
@@ -184,6 +234,11 @@ return declare([_WidgetBase], {
 			}
 		}
 		return lbl;
+	},
+
+	_setMaxHeightAttr: function(value)
+	{
+		this.maxHeight = value;
 	},
 
 // ****************** User events *********************************************************
